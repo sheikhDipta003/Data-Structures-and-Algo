@@ -46,15 +46,8 @@ void buildHeap(vector<int>& ht)
 
 // Function to insert an element into the tree
 void insert(vector<int> &hT, int newNum) {
-  int size = hT.size();
-  if (size == 0) {
-    hT.push_back(newNum);
-  } else {
-    hT.push_back(newNum);
-    for (int i = size / 2 - 1; i >= 0; i--) {
-      heapify(hT, i);
-    }
-  }
+  hT.push_back(newNum);
+  buildHeap(hT);
 }
 
 // Function to delete an element from the tree
