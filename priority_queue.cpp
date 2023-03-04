@@ -52,16 +52,17 @@ void insert(vector<int> &hT, int newNum) {
 
 // Function to delete an element from the tree
 void remove(vector<int> &hT, int num) {
-  int size = hT.size();
+  int N = hT.size();
   int i;
-  for (i = 0; i < size; i++) {
+  for (i = 0; i < N; i++) {
     if (num == hT[i])
       break;
   }
-  swap(&hT[i], &hT[size - 1]);
+  if(i >= N) return;
+  swap(&hT[i], &hT[N - 1]);
 
   hT.pop_back();
-  for (int i = size / 2 - 1; i >= 0; i--) {
+  for (int i = N / 2 - 1; i >= 0; i--) {
     heapify(hT, i);
   }
 }

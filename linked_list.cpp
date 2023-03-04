@@ -12,21 +12,41 @@ struct ListNode {
 };
  
 class LinkedList {
+    int count;
 public:
-    int length(ListNode* head){
-        if(!head) return 0;
-        if(!head->next) return 1;
-        int k = 0;
-        ListNode* temp = head;
-        while(temp){
-            temp = temp->next;
-            k++;
+    ListNode* insert(ListNode* head, ListNode* _node, int pos){
+        if(!head){
+            cout << "\nList empty, new list created.";
+            _node->next = nullptr;
+            head = _node;
+            count++;
+            return head;
         }
-        return k;
+        if(pos < 0){
+            cout << "\nIndex cannot be negative, inserting at pos 0.";
+            pos = 0;
+        } else if(pos > count){
+            cout << "\nNot enough elements, inserting at the end.";
+            pos = count;
+        }
+        if(!pos){
+            _node->next = head;
+            head = _node;
+            count++;
+            return head;
+        }
+        ListNode* temp = head;
+        for(int i = 0; i < pos-1; i++){
+            temp = temp->next;
+        }
+        _node->next = temp->next;
+        temp->next = _node;
+        count++;
+        return head;
     }
     ListNode* rotateRight(ListNode* head, int k) {  //returns head of the modified list
         if(!head || !head->next) return head;
-        k = k % length(head);       //list is unchanged if it is rotated length() times
+        k = k % count;       //list is unchanged if it is rotated length() times
         for(int i=0; i < k; i++){
             ListNode* secondLast=head, *last=head->next;
             while(last->next){
@@ -41,8 +61,7 @@ public:
     }
 
     ListNode* getNode(ListNode* head, int pos){     //returns reference of a node in this list at 'pos' index
-        int n = length(head);
-        if(pos < 0 || pos >= n) return nullptr;
+        if(pos < 0 || pos >= count) return nullptr;
         ListNode* temp = head;
         for(int i = 0; i < pos ; i++){
             temp = temp->next;
@@ -71,8 +90,7 @@ public:
     }
 
     ListNode* _sortList(ListNode* head) {    //returns 'head' of the sorted list (ascending) [insertion sort]
-        int n = length(head);
-        if(n <= 1) return head;
+        if(count <= 1) return head;
 
         ListNode *p1, *p2, *min_p;
         long min;
@@ -106,12 +124,11 @@ public:
     }
 
     ListNode* sortList(ListNode* head) {    //returns 'head' of the sorted list (ascending) [using sort()]
-        int n = length(head);
-        if(n <= 1) return head;
+        if(count <= 1) return head;
 
         ListNode* temp = head;
         vector<int> values;
-        for(int i = 0; i < n; i++){     //O(n)
+        for(int i = 0; i < count; i++){     //O(n)
             values.push_back(temp->val);
             temp = temp->next;
         }
@@ -119,7 +136,7 @@ public:
         sort(values.begin(), values.end());     //O(nlogn)
         // printVector(values);
         temp = head;
-        for(int i = 0; i < n; i++){     //O(n)
+        for(int i = 0; i < count; i++){     //O(n)
             temp->val = values[i];
             temp = temp->next;
         }
@@ -129,10 +146,9 @@ public:
 
     void printList(ListNode* head){
         ListNode* temp = head;
-        int n = length(head);
         cout << "\n[ ";
-        for(int i = 0; i < n; i++){
-            if(i < n-1) cout << temp->val << " -> ";
+        for(int i = 0; i < count; i++){
+            if(i < count-1) cout << temp->val << " -> ";
             else    cout << temp->val << " ]\n";
             temp = temp->next;
         }
@@ -142,18 +158,20 @@ public:
 int main(){
     int n;
     ListNode n3(3, nullptr);
-    ListNode n1(1, &n3);
-    ListNode n2(2, &n1);
+    ListNode n2(2, &n3);
     ListNode n4(4, &n2);
     ListNode* head = &n4;
 
     LinkedList LL;
-    LL.printList(head);
+    // LL.printList(head);
     // head = LL.rotateRight(head, 3);
     // LL.printList(head);
-    n = LL.length(head);
+    // n = LL.length(head);
     // cout << LL.binSearch(head, 7, 0, n-1) << endl;
     // cout << LL.getNode(head, 3)->val << endl;
-    head = LL.sortList(head);
+    // head = LL.sortList(head);
+    // LL.printList(head);
+    ListNode n1(1);
+    head = LL.insert(nullptr, &n1, 5);
     LL.printList(head);
 }
